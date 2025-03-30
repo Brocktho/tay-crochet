@@ -1,6 +1,7 @@
 import { createHash, createHmac } from 'crypto'
 import { type FileUpload } from '@mjackson/form-data-parser'
 import { createId } from '@paralleldrive/cuid2'
+import { clsx } from 'clsx'
 
 const STORAGE_ENDPOINT = process.env.AWS_ENDPOINT_URL_S3
 const STORAGE_BUCKET = process.env.BUCKET_NAME
@@ -24,6 +25,29 @@ async function uploadToStorage(file: File | FileUpload, key: string) {
 	}
 
 	return key
+}
+
+export async function uploadProductImage(
+	productId: string,
+	file: File | FileUpload,
+) {
+	const fileId = createId()
+	const fileExtension = file.name.split('.').pop() || ''
+	const timestamp = Date.now()
+	const key = `products/${productId}/images/${timestamp}-${fileId}.${fileExtension}`
+	return uploadToStorage(file, key)
+}
+
+export async function uploadProductVariant(
+	productId: string,
+	variantId: string,
+	file: File | FileUpload,
+) {
+	const fileId = createId()
+	const fileExtension = file.name.split('.').pop() || ''
+	const timestamp = Date.now()
+	const key = `products/${productId}/${variantId}/images/${timestamp}-${fileId}.${fileExtension}`
+	return uploadToStorage(file, key)
 }
 
 export async function uploadProfileImage(

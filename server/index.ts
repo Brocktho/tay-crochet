@@ -72,7 +72,7 @@ app.use((_, res, next) => {
 	helmet(res, {
 		general: {
 			referrerPolicy: false,
-		}
+		},
 	})
 	next()
 })
@@ -201,7 +201,6 @@ if (!ALLOW_INDEXING) {
 		next()
 	})
 }
-
 
 app.all(
 	'*',

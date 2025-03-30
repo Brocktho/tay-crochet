@@ -81,13 +81,13 @@ export default async function handleRequest(...args: DocRequestArgs) {
 										"'self'",
 									],
 									'font-src': ["'self'"],
-									'frame-src': ["'self'", "js.stripe.com"],
+									'frame-src': ["'self'", 'https://js.stripe.com'],
 									'img-src': ["'self'", 'data:'],
 									'script-src': [
 										"'strict-dynamic'",
 										"'self'",
 										`'nonce-${nonce}'`,
-										"'js.stripe.com"
+										'js.stripe.com',
 									],
 									'script-src-attr': [`'nonce-${nonce}'`],
 								},

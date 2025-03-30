@@ -7,7 +7,6 @@ import {
 	Scripts,
 	ScrollRestoration,
 	useLoaderData,
-	useMatches,
 } from 'react-router'
 import { HoneypotProvider } from 'remix-utils/honeypot/react'
 import { type Route } from './+types/root.ts'
@@ -15,7 +14,6 @@ import appleTouchIconAssetUrl from './assets/favicons/apple-touch-icon.png'
 import faviconAssetUrl from './assets/favicons/favicon.svg'
 import { GeneralErrorBoundary } from './components/error-boundary.tsx'
 import { EpicProgress } from './components/progress-bar.tsx'
-import { SearchBar } from './components/search-bar.tsx'
 import { useToast } from './components/toaster.tsx'
 import { Button } from './components/ui/button.tsx'
 import { href as iconsHref } from './components/ui/icon.tsx'
@@ -39,10 +37,9 @@ import { type Theme, getTheme } from './utils/theme.server.ts'
 import { makeTimings, time } from './utils/timing.server.ts'
 import { getToast } from './utils/toast.server.ts'
 import { useOptionalUser } from './utils/user.ts'
-import {loadStripe} from "@stripe/stripe-js";
-import type Stripe from "stripe";
+import { loadStripe } from '@stripe/stripe-js'
 
-const TITLE = "Tay Crochets";
+const TITLE = 'Tay Crochets'
 export const links: Route.LinksFunction = () => {
 	return [
 		// Preload svg sprite as a resource to avoid render blocking
@@ -70,9 +67,9 @@ export const meta: Route.MetaFunction = ({ data }) => {
 	]
 }
 
-let stripePromise : ReturnType<typeof loadStripe>
-if(typeof document !== "undefined") {
-	stripePromise = loadStripe(window.ENV.STRIPE_PUBLIC_KEY);
+let stripePromise: ReturnType<typeof loadStripe>
+if (typeof document !== 'undefined') {
+	stripePromise = loadStripe(window.ENV.STRIPE_PUBLIC_KEY)
 }
 
 export type RootContext = {
@@ -200,9 +197,9 @@ function App() {
 	const data = useLoaderData<typeof loader>()
 	const user = useOptionalUser()
 	const theme = useTheme()
-	const matches = useMatches()
-	const isOnSearchPage = matches.find((m) => m.id === 'routes/users+/index')
-	const searchBar = isOnSearchPage ? null : <SearchBar status="idle" />
+	//const matches = useMatches()
+	//const isOnSearchPage = matches.find((m) => m.id === 'routes/users+/index')
+	//const searchBar = isOnSearchPage ? null : <SearchBar status="idle" />
 	useToast(data.toast)
 
 	return (
@@ -211,9 +208,7 @@ function App() {
 				<header className="container py-6">
 					<nav className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
 						<Logo />
-						<div className="ml-auto hidden max-w-sm flex-1 sm:block">
-							{searchBar}
-						</div>
+						<div className="ml-auto hidden max-w-sm flex-1 sm:block"></div>
 						<div className="flex items-center gap-10">
 							{user ? (
 								<UserDropdown />
@@ -223,15 +218,11 @@ function App() {
 								</Button>
 							)}
 						</div>
-						<div className="block w-full sm:hidden">{searchBar}</div>
 					</nav>
 				</header>
 
 				<div className="flex-1">
-					<Link to={'/checkout'}>
-					Checkout
-					</Link>
-					<Outlet context={{stripePromise}}/>
+					<Outlet context={{ stripePromise }} />
 				</div>
 
 				<div className="container flex justify-between pb-5">
@@ -249,10 +240,10 @@ function Logo() {
 	return (
 		<Link to="/" className="group grid leading-snug">
 			<span className="font-light transition group-hover:-translate-x-1">
-				epic
+				Tay
 			</span>
 			<span className="font-bold transition group-hover:translate-x-1">
-				notes
+				Crochet
 			</span>
 		</Link>
 	)

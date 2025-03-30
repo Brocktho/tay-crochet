@@ -165,7 +165,7 @@ export function NoteEditor({
 	)
 }
 
-function ImageChooser({ meta }: { meta: FieldMetadata<ImageFieldset> }) {
+export function ImageChooser({ meta }: { meta: FieldMetadata<ImageFieldset> }) {
 	const fields = meta.getFieldset()
 	const existingImage = Boolean(fields.id.initialValue)
 	const [previewImage, setPreviewImage] = useState<string | null>(

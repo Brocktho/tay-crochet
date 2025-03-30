@@ -76,25 +76,14 @@ export default function ProfileRoute() {
 						</Form>
 					) : null}
 					<div className="mt-10 flex gap-4">
-						{isLoggedInUser ? (
+						{isLoggedInUser && (
 							<>
-								<Button asChild>
-									<Link to="notes" prefetch="intent">
-										My notes
-									</Link>
-								</Button>
 								<Button asChild>
 									<Link to="/settings/profile" prefetch="intent">
 										Edit profile
 									</Link>
 								</Button>
 							</>
-						) : (
-							<Button asChild>
-								<Link to="notes" prefetch="intent">
-									{userDisplayName}'s notes
-								</Link>
-							</Button>
 						)}
 					</div>
 				</div>
@@ -106,10 +95,10 @@ export default function ProfileRoute() {
 export const meta: Route.MetaFunction = ({ data, params }) => {
 	const displayName = data?.user.name ?? params.username
 	return [
-		{ title: `${displayName} | Epic Notes` },
+		{ title: `${displayName} | Tay Crochet` },
 		{
 			name: 'description',
-			content: `Profile of ${displayName} on Epic Notes`,
+			content: `Profile of ${displayName} on Tay Crochet`,
 		},
 	]
 }
