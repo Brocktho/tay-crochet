@@ -26,9 +26,6 @@ export const ProductNameSchema = z
 	.string({ required_error: 'You must specify a Product Name.' })
 	.min(PRODUCT_MIN_LENGTH, { message: 'Product Name is too short' })
 	.max(PRODUCT_MAX_LENGTH, { message: 'Product Name is too long' })
-	.regex(/^[a-zA-Z0-9_-]+$/, {
-		message: 'Username can only include letters, numbers, and underscores',
-	})
 export const ProductMainImageSchema = z.object({
 	id: z.string().optional(),
 	file: z
@@ -42,9 +39,7 @@ export const ProductMainImageSchema = z.object({
 export const ProductDescriptionSchema = z
 	.string()
 	.min(PRODUCT_MIN_LENGTH, { message: 'Product Description is too short' })
-	.regex(/^[a-zA-Z0-9_-]+$/, {
-		message: 'Description can only include letters, numbers, and underscores',
-	})
+
 export const ProductQuantitySchema = z.number()
 
 export const ProductPriceSchema = z.number()

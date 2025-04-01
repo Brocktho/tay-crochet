@@ -27,7 +27,7 @@ const titleMaxLength = 100
 const contentMinLength = 1
 const contentMaxLength = 10000
 
-export const MAX_UPLOAD_SIZE = 1024 * 1024 * 3 // 3MB
+export const MAX_UPLOAD_SIZE = 1024 * 1024 * 256 // 3MB
 
 const ImageFieldsetSchema = z.object({
 	id: z.string().optional(),
@@ -109,9 +109,8 @@ export function NoteEditor({
 							<Label>Images</Label>
 							<ul className="flex flex-col gap-4">
 								{imageList.map((image, index) => {
-									console.log('image.key', image.key)
 									return (
-										<li
+										<div
 											key={image.key}
 											className="relative border-b-2 border-muted-foreground"
 										>
@@ -130,7 +129,7 @@ export function NoteEditor({
 												</span>
 											</button>
 											<ImageChooser meta={image} />
-										</li>
+										</div>
 									)
 								})}
 							</ul>

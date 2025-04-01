@@ -26,6 +26,7 @@ model User {
   sessions    Session[]
   connections Connection[]
   passkey     Passkey[]
+  shoppingCart ShoppingCart[]
 }
 
 model Note {
@@ -191,17 +192,69 @@ model Passkey {
   @@index(userId)
 }
 
+model ShoppingCart {
+  id String @id @default(ulid())
+  // Either userId or token, if token, not a logged in user
+  userId String?
+  token String?
+  finished Boolean
+  user User? @relation(fields: [userId], references: [id])
+  purchase Purchase?
+  products ProductPurchase[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  @@index(userId)
+  @@index(token)
+}
+
+model Purchase {
+  id String @id @default(ulid())
+  name String
+  shoppingCartId String @unique
+  shippingId String @unique
+  shipping ShippingAddress @relation(fields: [shippingId], references: [id])
+  shoppingCart ShoppingCart @relation(fields: [shoppingCartId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ShippingAddress {
+  id String @id @default(ulid())
+  street1 String
+  street2 String
+  city String
+  state String
+  zip String
+  country String
+  purchase Purchase?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProductPurchase {
+  id String @id @default(ulid())
+  quantity Int
+  productVariantId String
+  shoppingCartId String
+  shoppingCart ShoppingCart @relation(fields: [shoppingCartId], references: [id])
+  productVariant ProductVariant @relation(fields: [productVariantId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index(shoppingCartId)
+}
+
 model Product {
   id String @id @default(ulid())
   title String
   description String
   categoryId String
-  variants ProductVariants[]
-  previews ProductPreviews[]
+  variants ProductVariant[]
   tags ProductTags[]
   category ProductCategories @relation(fields: [categoryId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  isDeleted Boolean @default(false)
 }
 
 model ProductTags {
@@ -214,25 +267,35 @@ model ProductTags {
 
 model ProductPreviews {
   id String @id @default(ulid())
-  description String
   imagePath String
-  productId String
-  product Product @relation(references: [id], fields: [productId])
+  imageAltText String
+  productVariantId String
+  product ProductVariant @relation(references: [id], fields: [productVariantId])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  isDeleted Boolean @default(false)
+
+  @@index(productVariantId)
 }
 
-model ProductVariants {
+model ProductVariant {
   id String @id @default(ulid())
   productId String
   title String
   imagePath String
+  imageAltText String
   isDefault Boolean
   quantity Int
+  available Int
   price Int
+  previews ProductPreviews[]
   product Product @relation(fields: [productId], references: [id])
+  purchases ProductPurchase[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  isDeleted Boolean @default(false)
+
+  @@index(productId)
 }
 
 model ProductCategories {

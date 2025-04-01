@@ -3,6 +3,7 @@ import {
 	Link,
 	Links,
 	Meta,
+	NavLink,
 	Outlet,
 	Scripts,
 	ScrollRestoration,
@@ -201,15 +202,25 @@ function App() {
 	//const isOnSearchPage = matches.find((m) => m.id === 'routes/users+/index')
 	//const searchBar = isOnSearchPage ? null : <SearchBar status="idle" />
 	useToast(data.toast)
-
+	const isAdmin = Boolean(user?.roles.find((role) => role.name === 'admin'))
 	return (
 		<>
 			<div className="flex min-h-screen flex-col justify-between">
 				<header className="container py-6">
 					<nav className="flex flex-wrap items-center justify-between gap-4 sm:flex-nowrap md:gap-8">
 						<Logo />
-						<div className="ml-auto hidden max-w-sm flex-1 sm:block"></div>
-						<div className="flex items-center gap-10">
+						<div className="ml-auto hidden max-w-sm flex-1 sm:block">
+							<div className={'flex w-full flex-row items-center gap-3'}>
+								{isAdmin ? (
+									<>
+										<NavLink to={'/admin/products/new'}>Add Product</NavLink>
+										<NavLink to={'/admin/manage-backend'}>Admin Panel</NavLink>
+									</>
+								) : null}
+								{/*<NavLink to={'/commissions'}>Custom Items</NavLink>*/}
+							</div>
+						</div>
+						<div className="flex flex-row items-center gap-10">
 							{user ? (
 								<UserDropdown />
 							) : (

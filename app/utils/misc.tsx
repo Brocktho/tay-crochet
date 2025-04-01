@@ -13,6 +13,17 @@ export function getNoteImgSrc(imageId: string) {
 	return `/resources/note-images/${imageId}`
 }
 
+export function getProductImgSrc(productVariantId: string) {
+	return `/resources/product-images/${productVariantId}`
+}
+
+export function getProductPreviewImgSrc(
+	productVariantId: string,
+	imageId: string,
+) {
+	return `/resources/product-images/${productVariantId}/${imageId}`
+}
+
 export function getErrorMessage(error: unknown) {
 	if (typeof error === 'string') return error
 	if (

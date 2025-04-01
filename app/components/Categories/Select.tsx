@@ -1,7 +1,7 @@
+import { type ProductCategories } from '@prisma/client'
 import { useEffect } from 'react'
-import { Combobox } from '#app/components/ui/combobox.tsx'
+import { Combobox, type ComboboxProps } from '#app/components/ui/combobox.tsx'
 import { useCategories } from '#app/routes/resources+/categories.tsx'
-import { ProductCategories } from '@prisma/client'
 
 export function CategoryGetOption(
 	category: Pick<ProductCategories, 'category' | 'id'>,
@@ -9,7 +9,12 @@ export function CategoryGetOption(
 	return { value: category.id, label: category.category }
 }
 
-export default function CategorySelect() {
+export type CategorySelectProps<T extends string> = {} & Omit<
+	ComboboxProps<T>,
+	'options'
+>
+
+export default function CategorySelect(props: CategorySelectProps<string>) {
 	const fetcher = useCategories()
 	useEffect(() => {
 		if (fetcher.state === 'idle' && fetcher.data === undefined) {
@@ -18,9 +23,10 @@ export default function CategorySelect() {
 	}, [fetcher, fetcher.state, fetcher.data])
 	return (
 		<Combobox
+			{...props}
 			label={'Category'}
 			placeholder={'Choose a category...'}
-			data={fetcher.data?.categories.map(CategoryGetOption) || []}
+			options={fetcher.data?.categories.map(CategoryGetOption) || []}
 			emptyText={'No Categories found.'}
 		/>
 	)

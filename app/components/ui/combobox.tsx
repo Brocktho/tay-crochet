@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import { type ReactNode, useId } from 'react'
+import { HTMLAttributes, HTMLProps, type ReactNode, useId } from 'react'
 import { Button } from '#app/components/ui/button'
 import {
 	Command,
@@ -26,19 +26,21 @@ export type SelectOption<T extends string> = {
 }
 
 export type ComboboxProps<T extends string> = {
-	data: SelectOption<T>[]
+	options: SelectOption<T>[]
 	placeholder?: string
 	emptyText?: ReactNode
 	label?: ReactNode
-	id?: string
-}
+	onChange?: (value: T) => unknown
+} & Omit<HTMLProps<HTMLDivElement>, 'onChange'>
 
 export function Combobox<T extends string>({
-	data,
+	options,
 	placeholder,
 	emptyText,
 	label,
 	id,
+	className,
+	onChange,
 	...rest
 }: ComboboxProps<T>) {
 	const backupId = useId()
@@ -47,7 +49,7 @@ export function Combobox<T extends string>({
 	const [value, setValue] = React.useState('')
 
 	return (
-		<div {...rest} className={'flex flex-col gap-1'}>
+		<div {...rest} className={cn('flex flex-col', className)}>
 			<label htmlFor={safeId}>{label}</label>
 			<Popover open={open} onOpenChange={setOpen}>
 				<PopoverTrigger asChild>
@@ -56,10 +58,10 @@ export function Combobox<T extends string>({
 						variant="outline"
 						role="combobox"
 						aria-expanded={open}
-						className="w-[200px] justify-between"
+						className="w-full justify-between"
 					>
 						{value
-							? data.find((item) => item.value === value)?.label
+							? options.find((item) => item.value === value)?.label
 							: placeholder}
 						<Icon
 							name={'chevron-up'}
@@ -67,17 +69,18 @@ export function Combobox<T extends string>({
 						/>
 					</Button>
 				</PopoverTrigger>
-				<PopoverContent className="w-[200px] p-0">
+				<PopoverContent className="w-full p-0">
 					<Command>
 						<CommandInput placeholder={placeholder} />
 						<CommandList>
 							<CommandEmpty>{emptyText}</CommandEmpty>
 							<CommandGroup>
-								{data.map((item) => (
+								{options.map((item) => (
 									<CommandItem
 										key={`${item.value}`}
 										value={item.value}
 										onSelect={(currentValue) => {
+											onChange?.(currentValue as T)
 											setValue(currentValue === value ? '' : currentValue)
 											setOpen(false)
 										}}
