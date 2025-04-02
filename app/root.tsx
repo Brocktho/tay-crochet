@@ -1,3 +1,4 @@
+import { loadStripe } from '@stripe/stripe-js'
 import {
 	data,
 	Link,
@@ -38,7 +39,6 @@ import { type Theme, getTheme } from './utils/theme.server.ts'
 import { makeTimings, time } from './utils/timing.server.ts'
 import { getToast } from './utils/toast.server.ts'
 import { useOptionalUser } from './utils/user.ts'
-import { loadStripe } from '@stripe/stripe-js'
 
 const TITLE = 'Tay Crochets'
 export const links: Route.LinksFunction = () => {
@@ -70,7 +70,9 @@ export const meta: Route.MetaFunction = ({ data }) => {
 
 let stripePromise: ReturnType<typeof loadStripe>
 if (typeof document !== 'undefined') {
-	stripePromise = loadStripe(window.ENV.STRIPE_PUBLIC_KEY)
+	if (window.ENV?.STRIPE_PUBLIC_KEY !== undefined) {
+		stripePromise = loadStripe(window.ENV.STRIPE_PUBLIC_KEY)
+	}
 }
 
 export type RootContext = {

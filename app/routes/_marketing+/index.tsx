@@ -1,7 +1,5 @@
-import { type Route } from './+types/index.ts'
-import { logos } from './logos/logos.ts'
 import { prisma } from '#app/utils/db.server.ts'
-import { Outlet } from 'react-router'
+import { type Route } from './+types/index.ts'
 
 export const meta: Route.MetaFunction = () => [{ title: 'Tay Crochet' }]
 
@@ -19,6 +17,11 @@ export default function Index({ loaderData }: Route.ComponentProps) {
 	const products = loaderData.products
 	return (
 		<main className="font-poppins grid h-full place-items-center">
+			<img
+				className="relative -z-10 -mt-24 h-[52rem] w-full object-cover"
+				src="/img/TayCrochetBanner.jpg"
+				alt="Welcome To Tay Crochet"
+			/>
 			<div className={'flex w-full flex-row flex-wrap justify-center gap-3'}>
 				{products.map((product) => {
 					return <div key={product.id} className={'flex flex-1'}></div>

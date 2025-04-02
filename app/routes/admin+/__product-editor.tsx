@@ -26,10 +26,11 @@ import {
 } from '#app/routes/admin+/products.new.tsx'
 import { type ImageFieldset } from '#app/routes/users+/$username_+/__note-editor.tsx'
 import { cn, getNoteImgSrc, useIsPending } from '#app/utils/misc.tsx'
-import { type Info } from './+types/products.$productId_.edit.ts'
+import { type Info as ProductInfo } from './+types/products.$productId_.edit.ts'
+import { type Info } from './+types/products.new.ts'
 
 export type NewProductEditorProps = {
-	product: Info['loaderData']['product']
+	product: ProductInfo['loaderData']['product']
 	actionData: Info['actionData']
 }
 

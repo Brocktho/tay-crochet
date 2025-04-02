@@ -1,9 +1,18 @@
+import { parseWithZod } from '@conform-to/zod'
+import { parseFormData } from '@mjackson/form-data-parser'
 import { type SEOHandle } from '@nasa-gcn/remix-seo'
+import { createId as cuid } from '@paralleldrive/cuid2'
 import { useEffect, useState } from 'react'
 import { data, redirect, useNavigate } from 'react-router'
+import { ulid } from 'ulid'
 import { z } from 'zod'
 import { GeneralErrorBoundary } from '#app/components/error-boundary.tsx'
 import ProductForm from '#app/routes/admin+/__product-editor.tsx'
+import {
+	type ImageFieldset,
+	MAX_UPLOAD_SIZE,
+} from '#app/routes/users+/$username_+/__note-editor.tsx'
+import { prisma } from '#app/utils/db.server.ts'
 import { requireUserWithRole } from '#app/utils/permissions.server.ts'
 import {
 	ProductDescriptionSchema,
@@ -12,21 +21,8 @@ import {
 	ProductPriceSchema,
 	ProductQuantitySchema,
 } from '#app/utils/product-validation.ts'
+import { uploadProductImage } from '#app/utils/storage.server.ts'
 import { type Route } from './+types/products.new.ts'
-import { parseFormData } from '@mjackson/form-data-parser'
-import {
-	type ImageFieldset,
-	MAX_UPLOAD_SIZE,
-	NoteEditorSchema,
-} from '#app/routes/users+/$username_+/__note-editor.tsx'
-import { parseWithZod } from '@conform-to/zod'
-import { prisma } from '#app/utils/db.server.ts'
-import { createId as cuid } from '@paralleldrive/cuid2'
-import {
-	uploadNoteImage,
-	uploadProductImage,
-} from '#app/utils/storage.server.ts'
-import { ulid } from 'ulid'
 
 export async function loader({ request }: Route.LoaderArgs) {
 	await requireUserWithRole(request, 'admin')
@@ -293,7 +289,7 @@ export async function action({ request }: Route.ActionArgs) {
 		},
 	})
 
-	return redirect(`/admin/products`)
+	throw redirect(`/admin/products`)
 }
 
 export const handle: SEOHandle = {
